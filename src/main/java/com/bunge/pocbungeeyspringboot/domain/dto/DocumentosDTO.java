@@ -12,6 +12,20 @@ public class DocumentosDTO implements Serializable{
 	
 	protected String filePath;
 	
+	
+	
+	public DocumentosDTO() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public DocumentosDTO(String fileName, String fileSize, String filePath) {
+		super();
+		this.fileName = fileName;
+		this.fileSize = fileSize;
+		this.filePath = filePath;
+	}
+
 	public String getFileSize() {
 		return fileSize;
 	}
