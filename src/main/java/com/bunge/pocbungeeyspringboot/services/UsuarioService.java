@@ -39,6 +39,11 @@ public class UsuarioService {
 		return usuarioRepo.save(newUser);
 	}
 	
+	public Usuario findByEmail(String email) {
+		Usuario usuario = usuarioRepo.findByEmail(email);
+		return usuario;
+	}
+	
 	public Usuario update(Integer id, @Valid UsuarioDTO dto) {
 		dto.setId(id);
 		Usuario oldUser = findById(id);
@@ -59,9 +64,9 @@ public class UsuarioService {
 	
 	@SuppressWarnings("unused")
 	private void ValidaPorEmail(UsuarioDTO dto) {
-		Optional<Usuario> usuario = usuarioRepo.findByEmail(dto.getEmail());
+		Usuario usuario = usuarioRepo.findByEmail(dto.getEmail());
 		
-		if(usuario.isPresent() && usuario.get().getId() != dto.getId())
+		if(usuario != null && usuario.getId() != dto.getId())
 		{
 			throw new DataIntegrityViolationException("E-mail já cadastrado!");
 		}

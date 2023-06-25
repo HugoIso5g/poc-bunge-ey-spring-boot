@@ -2,6 +2,7 @@ package com.bunge.pocbungeeyspringboot.domain.dto;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Optional;
 
 import com.bunge.pocbungeeyspringboot.domain.Usuario;
 

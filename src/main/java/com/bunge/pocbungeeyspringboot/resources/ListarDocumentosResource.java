@@ -8,7 +8,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +21,17 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bunge.pocbungeeyspringboot.domain.dto.DocumentosDTO;
+import com.bunge.pocbungeeyspringboot.domain.dto.LogUsuarioDTO;
+import com.bunge.pocbungeeyspringboot.services.LogUsuarioService;
+import com.bunge.pocbungeeyspringboot.services.UsuarioService;
 
 @RestController
 @RequestMapping(value="/documentos")
@@ -32,6 +39,12 @@ public class ListarDocumentosResource {
 	
 	@Autowired
 	private ResourcePatternResolver resourcePatternResolver;
+	
+	@Autowired
+	private LogUsuarioService service;
+	
+	@Autowired
+	private UsuarioService userService;
 	
 	@GetMapping
 	public ResponseEntity<List<DocumentosDTO>> listarDocumentos(){
@@ -47,7 +60,6 @@ public class ListarDocumentosResource {
 		try {
 			for(File arquivo : arquivos) {
 				DocumentosDTO dto = new DocumentosDTO();
-
 				dto.setFileName(arquivo.getName());
 				dto.setFilePath(arquivo.getAbsolutePath());
 				dto.setFileSize(humanReadableByteCountSI(arquivo.getAbsoluteFile().length()));
@@ -62,6 +74,13 @@ public class ListarDocumentosResource {
 	
 	@GetMapping(value="/download")
 	public ResponseEntity<Resource> download(@RequestParam("file") String file) throws IOException{
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		LogUsuarioDTO dto = new LogUsuarioDTO();
+		dto.setUsuario(userService.findByEmail(authentication.getName()));
+		dto.setFileName(file);
+		dto.setData(LocalDate.now());
+		service.create(dto);
 		
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 		URL url = loader.getResource("poc-documents");
