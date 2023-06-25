@@ -8,16 +8,15 @@ public class DocumentosDTO implements Serializable{
 	
 	protected String fileName;
 	
-	protected Long fileSize;
+	protected String fileSize;
 	
 	protected String filePath;
 	
-
-	public Long getFileSize() {
+	public String getFileSize() {
 		return fileSize;
 	}
 
-	public void setFileSize(Long fileSize) {
+	public void setFileSize(String fileSize) {
 		this.fileSize = fileSize;
 	}
 
