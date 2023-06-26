@@ -54,7 +54,6 @@ public class ListarDocumentosResource {
 	private LogUsuarioService service;
 	@Autowired
 	private UsuarioService userService;
-	
 	@Autowired
 	private FileStorageServiceImpl storageService;
 	
